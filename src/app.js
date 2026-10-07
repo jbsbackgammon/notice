@@ -303,16 +303,16 @@ function createNoticePanel(notice) {
 function titleSize(text = '') {
   const n = [...text].length;
   const split = state.settings.layout === 'split';
-  if (split) return n > 30 ? '6.5mm' : n > 18 ? '7.5mm' : '9.2mm';
-  return n > 36 ? '9mm' : n > 22 ? '11mm' : '13mm';
+  if (split) return n > 30 ? '13mm' : n > 18 ? '15mm' : '18.4mm';
+  return n > 36 ? '18mm' : n > 22 ? '22mm' : '26mm';
 }
 
 function bodySize(text = '') {
   const n = [...text].length;
   const lines = String(text).split('\n').length;
   const split = state.settings.layout === 'split';
-  if (split) return n > 220 || lines > 8 ? '3.8mm' : '4.8mm';
-  return n > 360 || lines > 12 ? '4.6mm' : n > 200 ? '5.5mm' : '6.5mm';
+  if (split) return n > 220 || lines > 8 ? '7.6mm' : '9.6mm';
+  return n > 360 || lines > 12 ? '9.2mm' : n > 200 ? '11mm' : '13mm';
 }
 
 function updatePreviewZoom() {
