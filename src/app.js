@@ -312,19 +312,12 @@ function createNoticePanel(notice) {
   return panel;
 }
 
-function titleSize(text = '') {
-  const n = [...text].length;
-  const split = state.settings.layout === 'split';
-  if (split) return n > 30 ? '13mm' : n > 18 ? '15mm' : '18.4mm';
-  return n > 36 ? '18mm' : n > 22 ? '22mm' : '26mm';
+function titleSize() {
+  return state.settings.layout === 'split' ? '18.4mm' : '26mm';
 }
 
-function bodySize(text = '') {
-  const n = [...text].length;
-  const lines = String(text).split('\n').length;
-  const split = state.settings.layout === 'split';
-  if (split) return n > 220 || lines > 8 ? '7.6mm' : '9.6mm';
-  return n > 360 || lines > 12 ? '9.2mm' : n > 200 ? '11mm' : '13mm';
+function bodySize() {
+  return state.settings.layout === 'split' ? '9.6mm' : '13mm';
 }
 
 function appendFitLines(container, lines) {
