@@ -230,7 +230,6 @@ function renderPreview() {
   pages.forEach((items, pageIndex) => {
     const wrap = document.createElement('div');
     wrap.className = `preview-page-wrap${pageIndex === currentPreviewPage ? '' : ' preview-page-hidden'}`;
-    wrap.innerHTML = `<p class="preview-page-label">${pageIndex + 1} / ${pages.length} ページ</p>`;
 
     const page = document.createElement('div');
     page.className = `a4-page ${state.settings.orientation} ${state.settings.layout}`;
