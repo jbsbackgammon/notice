@@ -101,32 +101,27 @@ function renderEditors() {
         </div>
       </div>
       <div class="editor-body">
-        <div class="editor-top-row full">
-          <label class="field">
-            <span>タイトル</span>
-            <input type="text" data-key="title" value="${escapeAttr(notice.title)}" placeholder="タイトル">
-          </label>
-          <label class="field">
-            <span>上部画像</span>
-            <select data-key="image">${imageOptions}</select>
-          </label>
-          <label class="field">
-            <span>URL</span>
-            <input type="url" data-key="url" value="${escapeAttr(notice.url)}" placeholder="https://example.com/">
-          </label>
+        <label class="field editor-title">
+          <span>タイトル</span>
+          <input type="text" data-key="title" value="${escapeAttr(notice.title)}" placeholder="タイトル">
+        </label>
+        <label class="field editor-image">
+          <span>上部画像</span>
+          <select data-key="image">${imageOptions}</select>
+        </label>
+        <label class="field editor-url">
+          <span>URL</span>
+          <input type="url" data-key="url" value="${escapeAttr(notice.url)}" placeholder="https://example.com/">
+        </label>
+        <div class="color-row editor-colors">
+          ${colorControl('titleColor', 'タイトル', notice.titleColor)}
+          ${colorControl('bodyColor', '説明文', notice.bodyColor)}
+          ${colorControl('backgroundColor', '背景', notice.backgroundColor)}
         </div>
-        <label class="field full">
+        <label class="field editor-description">
           <span>説明文</span>
           <textarea data-key="description" placeholder="説明文">${escapeHtml(notice.description)}</textarea>
         </label>
-        <div class="field full">
-          <span class="field-label">色</span>
-          <div class="color-row">
-            ${colorControl('titleColor', 'タイトル', notice.titleColor)}
-            ${colorControl('bodyColor', '説明文', notice.bodyColor)}
-            ${colorControl('backgroundColor', '背景', notice.backgroundColor)}
-          </div>
-        </div>
       </div>`;
 
     bindEditorCard(card, index);

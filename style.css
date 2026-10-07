@@ -84,16 +84,30 @@ button.small { min-height: 30px; padding: 4px 8px; font-size: 12px; }
 .editor-actions { display: flex; gap: 5px; margin-left: auto; }
 .editor-body {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: minmax(0, 1fr) minmax(160px, .9fr) minmax(0, 1.1fr) minmax(280px, 1.55fr);
+  grid-template-rows: auto auto;
   gap: 8px 10px;
   padding: 10px;
+  align-items: start;
 }
-.editor-body .full { grid-column: 1 / -1; }
-.editor-top-row {
+.editor-title { grid-column: 1; grid-row: 1; }
+.editor-image { grid-column: 2; grid-row: 1; }
+.editor-url { grid-column: 3; grid-row: 1; }
+.editor-description {
+  grid-column: 4;
+  grid-row: 1 / 3;
   display: grid;
-  grid-template-columns: minmax(0, 1.2fr) minmax(180px, .9fr) minmax(0, 1.4fr);
-  gap: 10px;
-  align-items: end;
+  grid-template-rows: auto 1fr;
+  min-height: 0;
+}
+.editor-description textarea {
+  height: 100%;
+  min-height: 0;
+  resize: none;
+}
+.editor-colors {
+  grid-column: 1 / 4;
+  grid-row: 2;
 }
 .color-row { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
 .color-field { display: grid; gap: 4px; }
@@ -214,9 +228,14 @@ button.small { min-height: 30px; padding: 4px 8px; font-size: 12px; }
 
 @media (max-width: 760px) {
   main { padding: 6px; }
-  .editor-body { grid-template-columns: 1fr; }
-  .editor-body .full { grid-column: auto; }
-  .editor-top-row { grid-template-columns: 1fr; }
+  .editor-body { grid-template-columns: 1fr; grid-template-rows: auto; }
+  .editor-title,
+  .editor-image,
+  .editor-url,
+  .editor-description,
+  .editor-colors { grid-column: 1; grid-row: auto; }
+  .editor-description { display: grid; grid-template-rows: auto auto; }
+  .editor-description textarea { min-height: 96px; height: auto; resize: vertical; }
   .color-row { grid-template-columns: 1fr; }
   .toolbar-actions { width: 100%; margin-left: 0; }
   .toolbar-actions button { flex: 1 1 auto; }
