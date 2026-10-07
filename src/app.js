@@ -355,7 +355,7 @@ function fitPreviewText() {
 
 function updatePreviewZoom() {
   const available = Math.max(260, previewAreaEl.clientWidth - 44);
-  const previewScale = 0.80;
+  const previewScale = 0.70;
   $$('.preview-page-wrap:not(.preview-page-hidden)', previewAreaEl).forEach(wrap => {
     const page = $('.a4-page', wrap);
     if (!page) return;

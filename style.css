@@ -25,6 +25,11 @@ main { padding: 5px 12px 10px; }
   max-width: 1240px;
   margin: 0 auto 6px;
 }
+.preview-section {
+  width: 100%;
+  margin-top: 6px;
+  margin-bottom: 6px;
+}
 .global-controls {
   display: flex;
   flex-wrap: wrap;
@@ -67,7 +72,7 @@ button.primary:hover { filter: brightness(.96); }
 button.danger { color: var(--danger); border-color: #fecaca; }
 button.small { min-height: 30px; padding: 4px 8px; font-size: 12px; }
 
-.notice-editors { display: grid; gap: 8px; margin-top: 8px; }
+.notice-editors { display: grid; gap: 8px; margin-top: 0; }
 .editor-card {
   display: grid;
   grid-template-columns: 76px minmax(0, 1fr);
@@ -317,8 +322,8 @@ button.small { min-height: 30px; padding: 4px 8px; font-size: 12px; }
 
 @media print {
   html, body { margin: 0 !important; padding: 0 !important; background: #fff !important; }
-  .control-panel, .preview-nav { display: none !important; }
-  main, .preview-section, .preview-area { margin: 0 !important; padding: 0 !important; max-width: none !important; border: 0 !important; background: #fff !important; display: block !important; }
+  .global-controls, .notice-editors, .preview-nav { display: none !important; }
+  main, .control-panel, .preview-section, .preview-area { margin: 0 !important; padding: 0 !important; max-width: none !important; width: auto !important; border: 0 !important; background: #fff !important; display: block !important; }
   .preview-page-hidden { position: static !important; left: auto !important; top: auto !important; visibility: visible !important; pointer-events: auto !important; }
   .preview-page-wrap { margin: 0 !important; padding: 0 !important; transform: none !important; zoom: 1 !important; break-after: page; page-break-after: always; }
   .preview-page-wrap:last-child { break-after: auto; page-break-after: auto; }
