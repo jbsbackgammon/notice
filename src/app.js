@@ -61,7 +61,10 @@ function bindGlobalEvents() {
   $('#importJson').addEventListener('click', () => $('#jsonFile').click());
   $('#jsonFile').addEventListener('change', importJson);
   $('#printPdf').addEventListener('click', () => window.print());
-  window.addEventListener('resize', updatePreviewZoom);
+  window.addEventListener('resize', () => {
+    fitPreviewText();
+    updatePreviewZoom();
+  });
 }
 
 async function loadImageFiles() {
@@ -245,7 +248,10 @@ function renderPreview() {
     previewAreaEl.append(wrap);
   });
   updatePrintPageRule();
-  requestAnimationFrame(updatePreviewZoom);
+  requestAnimationFrame(() => {
+    fitPreviewText();
+    updatePreviewZoom();
+  });
 }
 
 function createNoticePanel(notice) {
@@ -273,12 +279,12 @@ function createNoticePanel(notice) {
   content.className = 'notice-content';
   const title = document.createElement('h3');
   title.className = 'notice-title';
-  title.textContent = String(notice.title || '').replace(/ /g, '\n');
+  appendFitLines(title, String(notice.title || '').split(' '));
   content.append(title);
 
   const description = document.createElement('p');
   description.className = 'notice-description';
-  description.textContent = notice.description || '';
+  appendFitLines(description, String(notice.description || '').split('\n'));
   content.append(description);
 
   const normalizedUrl = normalizeUrl(notice.url);
@@ -313,6 +319,27 @@ function bodySize(text = '') {
   const split = state.settings.layout === 'split';
   if (split) return n > 220 || lines > 8 ? '7.6mm' : '9.6mm';
   return n > 360 || lines > 12 ? '9.2mm' : n > 200 ? '11mm' : '13mm';
+}
+
+function appendFitLines(container, lines) {
+  const values = lines.length ? lines : [''];
+  values.forEach(value => {
+    const line = document.createElement('span');
+    line.className = 'fit-line';
+    line.textContent = value || '\u00A0';
+    container.append(line);
+  });
+}
+
+function fitPreviewText() {
+  $$('.fit-line', previewAreaEl).forEach(line => {
+    line.style.transform = 'none';
+    const available = line.clientWidth;
+    const required = line.scrollWidth;
+    if (!available || !required || required <= available) return;
+    const scale = available / required;
+    line.style.transform = `scaleX(${scale})`;
+  });
 }
 
 function updatePreviewZoom() {

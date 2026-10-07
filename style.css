@@ -164,6 +164,7 @@ button.small { min-height: 30px; padding: 4px 8px; font-size: 12px; }
 .help { display: none; }
 
 .preview-area {
+  position: relative;
   display: grid;
   gap: 8px;
   justify-items: center;
@@ -196,7 +197,13 @@ button.small { min-height: 30px; padding: 4px 8px; font-size: 12px; }
   font-variant-numeric: tabular-nums;
 }
 .preview-page-wrap { position: relative; transform-origin: top center; }
-.preview-page-hidden { display: none; }
+.preview-page-hidden {
+  position: absolute;
+  left: -100000px;
+  top: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
 .preview-page-label { margin: 0 0 4px; text-align: center; color: #4b5563; font-size: 12px; font-weight: 700; }
 .a4-page {
   position: relative;
@@ -245,8 +252,7 @@ button.small { min-height: 30px; padding: 4px 8px; font-size: 12px; }
   font-size: var(--title-size, 12mm);
   font-weight: 800;
   line-height: 1.25;
-  overflow-wrap: anywhere;
-  white-space: pre-line;
+  overflow: visible;
 }
 .split .notice-title { margin-bottom: 4mm; }
 .notice-description {
@@ -256,8 +262,15 @@ button.small { min-height: 30px; padding: 4px 8px; font-size: 12px; }
   font-size: var(--body-size, 6mm);
   font-weight: 500;
   line-height: 1.65;
-  white-space: pre-wrap;
-  overflow-wrap: anywhere;
+  overflow: visible;
+}
+.fit-line {
+  display: block;
+  width: 100%;
+  max-width: none;
+  white-space: nowrap;
+  overflow: visible;
+  transform-origin: center center;
 }
 .notice-qr-block {
   flex: 0 0 auto;
@@ -300,7 +313,7 @@ button.small { min-height: 30px; padding: 4px 8px; font-size: 12px; }
   html, body { margin: 0 !important; padding: 0 !important; background: #fff !important; }
   .control-panel, .preview-nav { display: none !important; }
   main, .preview-section, .preview-area { margin: 0 !important; padding: 0 !important; max-width: none !important; border: 0 !important; background: #fff !important; display: block !important; }
-  .preview-page-hidden { display: block !important; }
+  .preview-page-hidden { position: static !important; left: auto !important; top: auto !important; visibility: visible !important; pointer-events: auto !important; }
   .preview-page-wrap { margin: 0 !important; padding: 0 !important; transform: none !important; zoom: 1 !important; break-after: page; page-break-after: always; }
   .preview-page-wrap:last-child { break-after: auto; page-break-after: auto; }
   .preview-page-label { display: none !important; }
