@@ -60,7 +60,7 @@ function bindGlobalEvents() {
   $('#exportJson').addEventListener('click', exportJson);
   $('#importJson').addEventListener('click', () => $('#jsonFile').click());
   $('#jsonFile').addEventListener('change', importJson);
-  $('#printPdf').addEventListener('click', () => window.print());
+  $('#printPdf').addEventListener('click', printPdf);
   window.addEventListener('resize', () => {
     fitPreviewText();
     updatePreviewZoom();
@@ -387,6 +387,30 @@ function colorControl(key, label, value) {
         <input type="text" class="color-code" data-key="${key}" value="${color.toUpperCase()}" maxlength="7" spellcheck="false" aria-label="${label}のカラーコード">
       </div>
     </div>`;
+}
+
+function printPdf() {
+  const originalTitle = document.title;
+  const firstTitle = String(state.notices?.[0]?.title || '').trim();
+  const safeTitle = firstTitle
+    .replace(/[\\/:*?"<>|]/g, '_')
+    .replace(/\s+/g, ' ')
+    .trim();
+
+  document.title = safeTitle ? `notice_${safeTitle}` : 'notice';
+
+  const restoreTitle = () => {
+    document.title = originalTitle;
+    window.removeEventListener('afterprint', restoreTitle);
+  };
+
+  window.addEventListener('afterprint', restoreTitle);
+  window.print();
+
+  // afterprint が発火しない環境向けの保険
+  setTimeout(() => {
+    if (document.title !== originalTitle) document.title = originalTitle;
+  }, 3000);
 }
 
 function exportJson() {
