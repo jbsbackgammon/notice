@@ -1,5 +1,5 @@
 const STORAGE_KEY = 'notice-tool-state-v1';
-const DATA_VERSION = 1;
+const DATA_VERSION = 2;
 const BUILD_VERSION = '__BUILD_VERSION__';
 
 const $ = (selector, root = document) => root.querySelector(selector);
@@ -11,8 +11,8 @@ const defaultNotice = () => ({
   description: 'こちらに説明文を入力してください。\n改行もそのまま反映されます。',
   url: '',
   image: '',
-  titleColor: '#111827',
-  bodyColor: '#111827',
+  titleColor: '#000000',
+  bodyColor: '#000000',
   backgroundColor: '#ffffff'
 });
 
@@ -257,8 +257,8 @@ function createNoticePanel(notice) {
   const panel = document.createElement('section');
   panel.className = 'notice-panel';
   panel.style.setProperty('--notice-bg', safeColor(notice.backgroundColor, '#ffffff'));
-  panel.style.setProperty('--title-color', safeColor(notice.titleColor, '#111827'));
-  panel.style.setProperty('--body-color', safeColor(notice.bodyColor, '#111827'));
+  panel.style.setProperty('--title-color', safeColor(notice.titleColor, '#000000'));
+  panel.style.setProperty('--body-color', safeColor(notice.bodyColor, '#000000'));
   panel.style.setProperty('--title-size', titleSize(notice.title));
   panel.style.setProperty('--body-size', bodySize(notice.description));
 
@@ -276,15 +276,22 @@ function createNoticePanel(notice) {
 
   const content = document.createElement('div');
   content.className = 'notice-content';
-  const title = document.createElement('h3');
-  title.className = 'notice-title';
-  appendFitLines(title, String(notice.title || '').split(' '));
-  content.append(title);
 
-  const description = document.createElement('p');
-  description.className = 'notice-description';
-  appendFitLines(description, String(notice.description || '').split('\n'));
-  content.append(description);
+  const titleText = String(notice.title || '').trim();
+  if (titleText) {
+    const title = document.createElement('h3');
+    title.className = 'notice-title';
+    appendFitLines(title, titleText.split(' '));
+    content.append(title);
+  }
+
+  const descriptionText = String(notice.description || '').trim();
+  if (descriptionText) {
+    const description = document.createElement('p');
+    description.className = 'notice-description';
+    appendFitLines(description, descriptionText.split('\n'));
+    content.append(description);
+  }
 
   const normalizedUrl = normalizeUrl(notice.url);
   if (normalizedUrl) {
@@ -348,7 +355,7 @@ function fitPreviewText() {
 
 function updatePreviewZoom() {
   const available = Math.max(260, previewAreaEl.clientWidth - 44);
-  const previewScale = 0.88;
+  const previewScale = 0.80;
   $$('.preview-page-wrap:not(.preview-page-hidden)', previewAreaEl).forEach(wrap => {
     const page = $('.a4-page', wrap);
     if (!page) return;
@@ -377,7 +384,8 @@ function imagePath(file) {
 }
 
 function colorControl(key, label, value) {
-  const color = safeColor(value, '#111827');
+  const fallback = key === 'backgroundColor' ? '#ffffff' : '#000000';
+  const color = safeColor(value, fallback);
   return `
     <div class="color-field">
       <span class="field-label">${label}</span>
@@ -417,6 +425,7 @@ async function importJson(event) {
 
 function normalizeState(raw) {
   if (!raw || typeof raw !== 'object') throw new Error('JSON形式が正しくありません。');
+  const isLegacyDefaultColor = Number(raw.version || 1) < 2;
   const notices = Array.isArray(raw.notices) && raw.notices.length ? raw.notices : [defaultNotice()];
   return {
     version: DATA_VERSION,
@@ -428,8 +437,12 @@ function normalizeState(raw) {
       ...defaultNotice(),
       ...n,
       id: n.id || (crypto.randomUUID ? crypto.randomUUID() : `${Date.now()}-${Math.random()}`),
-      titleColor: safeColor(n.titleColor, '#111827'),
-      bodyColor: safeColor(n.bodyColor, '#111827'),
+      titleColor: isLegacyDefaultColor && String(n.titleColor || '').toLowerCase() === '#111827'
+        ? '#000000'
+        : safeColor(n.titleColor, '#000000'),
+      bodyColor: isLegacyDefaultColor && String(n.bodyColor || '').toLowerCase() === '#111827'
+        ? '#000000'
+        : safeColor(n.bodyColor, '#000000'),
       backgroundColor: safeColor(n.backgroundColor, '#ffffff')
     }))
   };

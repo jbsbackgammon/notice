@@ -233,22 +233,22 @@ button.small { min-height: 30px; padding: 4px 8px; font-size: 12px; }
 .notice-image-wrap { width: 100%; flex: 0 0 auto; overflow: hidden; line-height: 0; }
 .notice-image { display: block; width: 100%; height: auto; }
 .notice-content {
-  flex: 1 1 auto;
+  flex: 1 1 0;
   min-height: 0;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: space-evenly;
-  gap: 0;
-  padding: 0 13mm;
+  justify-content: center;
+  gap: 12mm;
+  padding: 12mm 13mm;
   text-align: center;
   overflow: hidden;
 }
-.split .notice-content { gap: 0; padding: 0 9mm; }
+.split .notice-content { gap: 6mm; padding: 7mm 9mm; }
 .notice-title {
   width: 100%;
   margin: 0;
-  color: var(--title-color, #111827);
+  color: var(--title-color, #000000);
   font-size: var(--title-size, 12mm);
   font-weight: 800;
   line-height: 1.25;
@@ -257,7 +257,7 @@ button.small { min-height: 30px; padding: 4px 8px; font-size: 12px; }
 .notice-description {
   width: 100%;
   margin: 0;
-  color: var(--body-color, #111827);
+  color: var(--body-color, #000000);
   font-size: var(--body-size, 6mm);
   font-weight: 500;
   line-height: 1.65;
