@@ -69,21 +69,33 @@ button.small { min-height: 30px; padding: 4px 8px; font-size: 12px; }
 
 .notice-editors { display: grid; gap: 8px; margin-top: 8px; }
 .editor-card {
+  display: grid;
+  grid-template-columns: 76px minmax(0, 1fr);
   background: var(--panel);
   border: 1px solid var(--line);
   border-radius: var(--radius);
   overflow: hidden;
 }
-.editor-card-header {
+.editor-sidebar {
   display: flex;
-  align-items: center;
+  flex-direction: column;
+  align-items: stretch;
   gap: 8px;
-  padding: 7px 10px;
-  border-bottom: 1px solid #e5e7eb;
+  padding: 10px 7px;
+  border-right: 1px solid #e5e7eb;
   background: #f9fafb;
 }
-.editor-card-header strong { font-size: 14px; }
-.editor-actions { display: flex; gap: 5px; margin-left: auto; }
+.editor-sidebar strong {
+  font-size: 14px;
+  text-align: center;
+  white-space: nowrap;
+}
+.editor-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+.editor-actions button { width: 100%; }
 .editor-body {
   display: grid;
   grid-template-columns: minmax(0, 3fr) minmax(280px, 1.55fr);
@@ -237,6 +249,9 @@ button.small { min-height: 30px; padding: 4px 8px; font-size: 12px; }
 
 @media (max-width: 760px) {
   main { padding: 6px; }
+  .editor-card { grid-template-columns: 68px minmax(0, 1fr); }
+  .editor-sidebar { padding: 8px 5px; }
+  .editor-actions button { padding-left: 4px; padding-right: 4px; }
   .editor-body { grid-template-columns: 1fr; }
   .editor-left { grid-template-columns: 1fr; grid-template-rows: auto; }
   .editor-title,

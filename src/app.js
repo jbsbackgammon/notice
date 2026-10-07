@@ -92,15 +92,15 @@ function renderEditors() {
 
     const imageOptions = imageOptionHtml(notice.image);
     card.innerHTML = `
-      <div class="editor-card-header">
-        <strong>案内 ${index + 1}</strong>
+      <aside class="editor-sidebar">
+        <strong>案内${index + 1}</strong>
         <div class="editor-actions">
           <button type="button" class="small move-up" ${index === 0 ? 'disabled' : ''}>↑</button>
           <button type="button" class="small move-down" ${index === state.notices.length - 1 ? 'disabled' : ''}>↓</button>
           <button type="button" class="small duplicate">複製</button>
           <button type="button" class="small danger delete" ${state.notices.length === 1 ? 'disabled' : ''}>削除</button>
         </div>
-      </div>
+      </aside>
       <div class="editor-body">
         <div class="editor-left">
           <label class="field editor-title">
