@@ -9,13 +9,6 @@
   <style id="printPageStyle">@page { size: A4 portrait; margin: 0; }</style>
 </head>
 <body>
-  <header class="app-header">
-    <div>
-      <h1>掲示物作成</h1>
-      <p>A4掲示物を作成し、PDF出力できます。</p>
-    </div>
-  </header>
-
   <main>
     <section class="control-panel" aria-label="掲示物設定">
       <div class="global-controls">
@@ -45,10 +38,7 @@
     </section>
 
     <section class="preview-section" aria-label="A4プレビュー">
-      <div class="section-heading">
-        <h2>A4プレビュー</h2>
-        <span id="pageCount"></span>
-      </div>
+      <span id="pageCount" hidden></span>
       <div id="previewArea" class="preview-area"></div>
     </section>
   </main>
