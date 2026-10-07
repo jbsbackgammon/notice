@@ -67,7 +67,7 @@ button {
   color: #111827;
 }
 button:hover { background: #f8fafc; }
-button.primary { background: var(--accent); border-color: var(--accent); color: #fff; }
+button.primary { background: var(--accent); border-color: var(--accent); color: #000; }
 button.primary:hover { filter: brightness(.96); }
 button.danger { color: var(--danger); border-color: #fecaca; }
 button.small { min-height: 30px; padding: 4px 8px; font-size: 12px; }
