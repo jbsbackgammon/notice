@@ -273,7 +273,7 @@ function createNoticePanel(notice) {
   content.className = 'notice-content';
   const title = document.createElement('h3');
   title.className = 'notice-title';
-  title.textContent = notice.title || '';
+  title.textContent = String(notice.title || '').replace(/ /g, '\n');
   content.append(title);
 
   const description = document.createElement('p');

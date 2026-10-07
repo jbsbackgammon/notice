@@ -246,6 +246,7 @@ button.small { min-height: 30px; padding: 4px 8px; font-size: 12px; }
   font-weight: 800;
   line-height: 1.25;
   overflow-wrap: anywhere;
+  white-space: pre-line;
 }
 .split .notice-title { margin-bottom: 4mm; }
 .notice-description {
