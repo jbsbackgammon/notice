@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="robots" content="noindex,nofollow,noarchive">
   <title>掲示物作成</title>
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="style.css?v=__BUILD_VERSION__">
   <style id="printPageStyle">@page { size: A4 portrait; margin: 0; }</style>
 </head>
 <body>
@@ -13,21 +13,19 @@
     <section class="control-panel" aria-label="掲示物設定">
       <div class="global-controls">
         <label class="field compact">
-          <span>A4向き</span>
-          <select id="orientation">
-            <option value="portrait">縦</option>
-            <option value="landscape">横</option>
+          <select id="orientation" aria-label="A4向き">
+            <option value="portrait">A4縦</option>
+            <option value="landscape">A4横</option>
           </select>
         </label>
-        <label class="field compact">
-          <span>レイアウト</span>
-          <select id="layoutMode">
+        <label class="field compact layout-field">
+          <select id="layoutMode" aria-label="レイアウト">
             <option value="single">1面</option>
             <option value="split">2分割</option>
           </select>
         </label>
         <div class="toolbar-actions">
-          <button type="button" id="addNotice" class="primary">案内を追加</button>
+          <button type="button" id="addNotice" class="primary">案内追加</button>
           <button type="button" id="importJson">JSON取込</button>
           <button type="button" id="exportJson">JSON出力</button>
           <button type="button" id="printPdf" class="primary">PDF出力</button>
@@ -43,7 +41,7 @@
     </section>
   </main>
 
-  <script src="assets/vendor/qr.js"></script>
-  <script type="module" src="src/app.js"></script>
+  <script src="assets/vendor/qr.js?v=__BUILD_VERSION__"></script>
+  <script type="module" src="src/app.js?v=__BUILD_VERSION__"></script>
 </body>
 </html>

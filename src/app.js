@@ -1,5 +1,6 @@
 const STORAGE_KEY = 'notice-tool-state-v1';
 const DATA_VERSION = 1;
+const BUILD_VERSION = '__BUILD_VERSION__';
 
 const $ = (selector, root = document) => root.querySelector(selector);
 const $$ = (selector, root = document) => [...root.querySelectorAll(selector)];
@@ -64,7 +65,7 @@ function bindGlobalEvents() {
 
 async function loadImageFiles() {
   try {
-    const res = await fetch('assets/images.json', { cache: 'no-store' });
+    const res = await fetch(`assets/images.json?v=${encodeURIComponent(BUILD_VERSION)}`, { cache: 'no-store' });
     if (!res.ok) throw new Error('manifest unavailable');
     const json = await res.json();
     imageFiles = Array.isArray(json) ? json.filter(v => typeof v === 'string') : [];
@@ -101,22 +102,24 @@ function renderEditors() {
         </div>
       </div>
       <div class="editor-body">
-        <label class="field editor-title">
-          <span>タイトル</span>
-          <input type="text" data-key="title" value="${escapeAttr(notice.title)}" placeholder="タイトル">
-        </label>
-        <label class="field editor-image">
-          <span>上部画像</span>
-          <select data-key="image">${imageOptions}</select>
-        </label>
-        <label class="field editor-url">
-          <span>URL</span>
-          <input type="url" data-key="url" value="${escapeAttr(notice.url)}" placeholder="https://example.com/">
-        </label>
-        <div class="color-row editor-colors">
-          ${colorControl('titleColor', 'タイトル', notice.titleColor)}
-          ${colorControl('bodyColor', '説明文', notice.bodyColor)}
-          ${colorControl('backgroundColor', '背景', notice.backgroundColor)}
+        <div class="editor-left">
+          <label class="field editor-title">
+            <span>タイトル</span>
+            <input type="text" data-key="title" value="${escapeAttr(notice.title)}" placeholder="タイトル">
+          </label>
+          <label class="field editor-image">
+            <span>上部画像</span>
+            <select data-key="image">${imageOptions}</select>
+          </label>
+          <label class="field editor-url">
+            <span>URL</span>
+            <input type="url" data-key="url" value="${escapeAttr(notice.url)}" placeholder="https://example.com/">
+          </label>
+          <div class="color-row editor-colors">
+            ${colorControl('titleColor', 'タイトル', notice.titleColor)}
+            ${colorControl('bodyColor', '説明文', notice.bodyColor)}
+            ${colorControl('backgroundColor', '背景', notice.backgroundColor)}
+          </div>
         </div>
         <label class="field editor-description">
           <span>説明文</span>
@@ -314,7 +317,7 @@ function imageOptionHtml(current) {
 }
 
 function imagePath(file) {
-  return `images/${String(file).split('/').map(encodeURIComponent).join('/')}`;
+  return `images/${String(file).split('/').map(encodeURIComponent).join('/')}?v=${encodeURIComponent(BUILD_VERSION)}`;
 }
 
 function colorControl(key, label, value) {
