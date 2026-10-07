@@ -9,7 +9,6 @@ const defaultNotice = () => ({
   title: 'ご案内',
   description: 'こちらに説明文を入力してください。\n改行もそのまま反映されます。',
   url: '',
-  showQr: true,
   image: '',
   titleColor: '#111827',
   bodyColor: '#111827',
@@ -102,33 +101,29 @@ function renderEditors() {
         </div>
       </div>
       <div class="editor-body">
-        <label class="field">
-          <span>タイトル</span>
-          <input type="text" data-key="title" value="${escapeAttr(notice.title)}" placeholder="タイトル">
-        </label>
-        <label class="field">
-          <span>上部画像</span>
-          <select data-key="image">${imageOptions}</select>
-          <p class="help">リポジトリの images フォルダ内の画像を選択します。</p>
-        </label>
+        <div class="editor-top-row full">
+          <label class="field">
+            <span>タイトル</span>
+            <input type="text" data-key="title" value="${escapeAttr(notice.title)}" placeholder="タイトル">
+          </label>
+          <label class="field">
+            <span>上部画像</span>
+            <select data-key="image">${imageOptions}</select>
+          </label>
+          <label class="field">
+            <span>URL</span>
+            <input type="url" data-key="url" value="${escapeAttr(notice.url)}" placeholder="https://example.com/">
+          </label>
+        </div>
         <label class="field full">
           <span>説明文</span>
           <textarea data-key="description" placeholder="説明文">${escapeHtml(notice.description)}</textarea>
-          <p class="help">入力した改行をそのまま掲示物へ反映します。</p>
-        </label>
-        <label class="field">
-          <span>URL</span>
-          <input type="url" data-key="url" value="${escapeAttr(notice.url)}" placeholder="https://example.com/">
-        </label>
-        <label class="field">
-          <span>QRコード</span>
-          <span class="check-row"><input type="checkbox" data-key="showQr" ${notice.showQr ? 'checked' : ''}> URLのQRコードを表示</span>
         </label>
         <div class="field full">
           <span class="field-label">色</span>
           <div class="color-row">
             ${colorControl('titleColor', 'タイトル', notice.titleColor)}
-            ${colorControl('bodyColor', '説明文・URL', notice.bodyColor)}
+            ${colorControl('bodyColor', '説明文', notice.bodyColor)}
             ${colorControl('backgroundColor', '背景', notice.backgroundColor)}
           </div>
         </div>
@@ -140,17 +135,42 @@ function renderEditors() {
 }
 
 function bindEditorCard(card, index) {
-  $$('[data-key]', card).forEach(el => {
-    const eventName = el.matches('select,input[type="checkbox"],input[type="color"]') ? 'change' : 'input';
+  $$('[data-key]:not(.color-code)', card).forEach(el => {
+    const eventName = el.matches('select') ? 'change' : 'input';
     el.addEventListener(eventName, () => {
       const key = el.dataset.key;
-      state.notices[index][key] = el.type === 'checkbox' ? el.checked : el.value;
-      if (el.type === 'color') {
-        const value = el.closest('.color-field')?.querySelector('.color-value');
-        if (value) value.textContent = el.value.toUpperCase();
-      }
+      state.notices[index][key] = el.value;
       renderPreview();
       saveLocalState();
+    });
+  });
+
+  $$('.color-field', card).forEach(field => {
+    const preview = $('.color-preview', field);
+    const code = $('.color-code', field);
+    const key = code.dataset.key;
+
+    preview.addEventListener('input', () => {
+      const color = preview.value.toUpperCase();
+      code.value = color;
+      state.notices[index][key] = color;
+      renderPreview();
+      saveLocalState();
+    });
+
+    code.addEventListener('input', () => {
+      const normalized = normalizeColorCode(code.value);
+      if (!normalized) return;
+      preview.value = normalized;
+      state.notices[index][key] = normalized;
+      renderPreview();
+      saveLocalState();
+    });
+
+    code.addEventListener('blur', () => {
+      const current = safeColor(state.notices[index][key], preview.value);
+      code.value = current.toUpperCase();
+      preview.value = current;
     });
   });
 
@@ -240,7 +260,7 @@ function createNoticePanel(notice) {
   content.append(description);
 
   const normalizedUrl = normalizeUrl(notice.url);
-  if (notice.showQr && normalizedUrl) {
+  if (normalizedUrl) {
     const qrBlock = document.createElement('div');
     qrBlock.className = 'notice-qr-block';
     const canvas = document.createElement('canvas');
@@ -252,10 +272,6 @@ function createNoticePanel(notice) {
     } catch (error) {
       console.warn('QR generation failed:', error);
     }
-    const urlText = document.createElement('div');
-    urlText.className = 'notice-url';
-    urlText.textContent = normalizedUrl;
-    qrBlock.append(urlText);
     content.append(qrBlock);
   }
   panel.append(content);
@@ -273,7 +289,7 @@ function bodySize(text = '') {
   const n = [...text].length;
   const lines = String(text).split('\n').length;
   const split = state.settings.layout === 'split';
-  if (split) return n > 220 || lines > 8 ? '3.4mm' : n > 120 ? '3.8mm' : '4.3mm';
+  if (split) return n > 220 || lines > 8 ? '3.4mm' : '4.3mm';
   return n > 360 || lines > 12 ? '4.2mm' : n > 200 ? '5mm' : '6mm';
 }
 
@@ -308,7 +324,14 @@ function imagePath(file) {
 
 function colorControl(key, label, value) {
   const color = safeColor(value, '#111827');
-  return `<label class="color-field"><input type="color" data-key="${key}" value="${color}"><span><span class="field-label">${label}</span><br><span class="color-value">${color.toUpperCase()}</span></span></label>`;
+  return `
+    <div class="color-field">
+      <span class="field-label">${label}</span>
+      <div class="color-input-row">
+        <input type="color" class="color-preview" value="${color}" aria-label="${label}の色プレビュー">
+        <input type="text" class="color-code" data-key="${key}" value="${color.toUpperCase()}" maxlength="7" spellcheck="false" aria-label="${label}のカラーコード">
+      </div>
+    </div>`;
 }
 
 function exportJson() {
@@ -351,7 +374,6 @@ function normalizeState(raw) {
       ...defaultNotice(),
       ...n,
       id: n.id || (crypto.randomUUID ? crypto.randomUUID() : `${Date.now()}-${Math.random()}`),
-      showQr: n.showQr !== false,
       titleColor: safeColor(n.titleColor, '#111827'),
       bodyColor: safeColor(n.bodyColor, '#111827'),
       backgroundColor: safeColor(n.backgroundColor, '#ffffff')
@@ -381,6 +403,12 @@ function normalizeUrl(value) {
   } catch {
     return text;
   }
+}
+
+function normalizeColorCode(value) {
+  const text = String(value || '').trim();
+  const withHash = text.startsWith('#') ? text : `#${text}`;
+  return /^#[0-9a-f]{6}$/i.test(withHash) ? withHash.toLowerCase() : '';
 }
 
 function safeColor(value, fallback) { return /^#[0-9a-f]{6}$/i.test(String(value || '')) ? value : fallback; }

@@ -89,12 +89,38 @@ button.small { min-height: 30px; padding: 4px 8px; font-size: 12px; }
   padding: 10px;
 }
 .editor-body .full { grid-column: 1 / -1; }
+.editor-top-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(180px, .9fr) minmax(0, 1.4fr);
+  gap: 10px;
+  align-items: end;
+}
 .color-row { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
-.color-field { display: grid; grid-template-columns: 40px 1fr; align-items: center; gap: 6px; }
-.color-field input[type="color"] { width: 40px; height: 34px; padding: 2px; border: 1px solid #c7cbd1; border-radius: 7px; background: #fff; }
-.color-value { font-size: 12px; color: var(--muted); font-variant-numeric: tabular-nums; }
-.check-row { display: flex; align-items: center; gap: 7px; min-height: 34px; }
-.check-row input { width: 18px; height: 18px; }
+.color-field { display: grid; gap: 4px; }
+.color-input-row {
+  display: grid;
+  grid-template-columns: 34px minmax(0, 1fr);
+  gap: 6px;
+  align-items: stretch;
+}
+.color-preview {
+  width: 34px;
+  height: 34px;
+  padding: 0;
+  border: 1px solid #c7cbd1;
+  border-radius: 5px;
+  background: none;
+  overflow: hidden;
+}
+.color-preview::-webkit-color-swatch-wrapper { padding: 0; }
+.color-preview::-webkit-color-swatch { border: 0; }
+.color-preview::-moz-color-swatch { border: 0; }
+.color-code {
+  min-width: 0;
+  height: 34px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  text-transform: uppercase;
+}
 .help { display: none; }
 
 .preview-area {
@@ -174,7 +200,6 @@ button.small { min-height: 30px; padding: 4px 8px; font-size: 12px; }
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 2mm;
   margin-top: 9mm;
 }
 .split .notice-qr-block { margin-top: 4mm; }
@@ -185,20 +210,13 @@ button.small { min-height: 30px; padding: 4px 8px; font-size: 12px; }
   background: #fff;
 }
 .split .notice-qr { width: 30mm; height: 30mm; }
-.notice-url {
-  max-width: 100%;
-  color: var(--body-color, #111827);
-  font-size: 3.3mm;
-  line-height: 1.3;
-  word-break: break-all;
-}
-.split .notice-url { font-size: 2.7mm; }
 .empty-panel { background: #fff; }
 
 @media (max-width: 760px) {
   main { padding: 6px; }
   .editor-body { grid-template-columns: 1fr; }
   .editor-body .full { grid-column: auto; }
+  .editor-top-row { grid-template-columns: 1fr; }
   .color-row { grid-template-columns: 1fr; }
   .toolbar-actions { width: 100%; margin-left: 0; }
   .toolbar-actions button { flex: 1 1 auto; }
