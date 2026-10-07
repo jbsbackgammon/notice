@@ -238,13 +238,13 @@ button.small { min-height: 30px; padding: 4px 8px; font-size: 12px; }
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  gap: 12mm;
-  padding: 12mm 13mm;
+  justify-content: space-evenly;
+  gap: 0;
+  padding: 0 13mm;
   text-align: center;
   overflow: hidden;
 }
-.split .notice-content { gap: 6mm; padding: 7mm 9mm; }
+.split .notice-content { gap: 0; padding: 0 9mm; }
 .notice-title {
   width: 100%;
   margin: 0;
