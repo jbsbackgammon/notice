@@ -24,6 +24,7 @@ const defaultState = () => ({
 
 let state = loadLocalState();
 let imageFiles = [];
+let currentPreviewPage = 0;
 
 const orientationEl = $('#orientation');
 const layoutModeEl = $('#layoutMode');
@@ -198,11 +199,34 @@ function renderPreview() {
   previewAreaEl.innerHTML = '';
   const perPage = state.settings.layout === 'split' ? 2 : 1;
   const pages = chunk(state.notices, perPage);
+  currentPreviewPage = Math.min(currentPreviewPage, Math.max(0, pages.length - 1));
   pageCountEl.textContent = `${pages.length}ページ / ${state.notices.length}件`;
+
+  if (pages.length > 1) {
+    const nav = document.createElement('div');
+    nav.className = 'preview-nav';
+    nav.innerHTML = `
+      <button type="button" class="preview-nav-button preview-prev" aria-label="前のページ">←</button>
+      <span class="preview-nav-count">${currentPreviewPage + 1} / ${pages.length}</span>
+      <button type="button" class="preview-nav-button preview-next" aria-label="次のページ">→</button>`;
+    $('.preview-prev', nav).disabled = currentPreviewPage === 0;
+    $('.preview-next', nav).disabled = currentPreviewPage === pages.length - 1;
+    $('.preview-prev', nav).addEventListener('click', () => {
+      if (currentPreviewPage <= 0) return;
+      currentPreviewPage -= 1;
+      renderPreview();
+    });
+    $('.preview-next', nav).addEventListener('click', () => {
+      if (currentPreviewPage >= pages.length - 1) return;
+      currentPreviewPage += 1;
+      renderPreview();
+    });
+    previewAreaEl.append(nav);
+  }
 
   pages.forEach((items, pageIndex) => {
     const wrap = document.createElement('div');
-    wrap.className = 'preview-page-wrap';
+    wrap.className = `preview-page-wrap${pageIndex === currentPreviewPage ? '' : ' preview-page-hidden'}`;
     wrap.innerHTML = `<p class="preview-page-label">${pageIndex + 1} / ${pages.length} ページ</p>`;
 
     const page = document.createElement('div');
@@ -293,12 +317,13 @@ function bodySize(text = '') {
 
 function updatePreviewZoom() {
   const available = Math.max(260, previewAreaEl.clientWidth - 44);
-  $$('.preview-page-wrap', previewAreaEl).forEach(wrap => {
+  const previewScale = 0.88;
+  $$('.preview-page-wrap:not(.preview-page-hidden)', previewAreaEl).forEach(wrap => {
     const page = $('.a4-page', wrap);
     if (!page) return;
     wrap.style.zoom = '1';
     const width = page.getBoundingClientRect().width;
-    const zoom = Math.min(1, available / width);
+    const zoom = Math.min(previewScale, (available / width) * previewScale);
     wrap.style.zoom = String(zoom);
   });
 }
