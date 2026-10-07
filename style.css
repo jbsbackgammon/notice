@@ -240,21 +240,21 @@ button.small { min-height: 30px; padding: 4px 8px; font-size: 12px; }
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  gap: 12mm;
   padding: 12mm 13mm;
   text-align: center;
   overflow: hidden;
 }
-.split .notice-content { padding: 7mm 9mm; }
+.split .notice-content { gap: 6mm; padding: 7mm 9mm; }
 .notice-title {
   width: 100%;
-  margin: 0 0 7mm;
+  margin: 0;
   color: var(--title-color, #111827);
   font-size: var(--title-size, 12mm);
   font-weight: 800;
   line-height: 1.25;
   overflow: visible;
 }
-.split .notice-title { margin-bottom: 4mm; }
 .notice-description {
   width: 100%;
   margin: 0;
@@ -285,9 +285,8 @@ button.small { min-height: 30px; padding: 4px 8px; font-size: 12px; }
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-top: 9mm;
+  margin: 0;
 }
-.split .notice-qr-block { margin-top: 4mm; }
 .notice-qr {
   display: block;
   width: 84mm;
