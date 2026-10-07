@@ -265,7 +265,7 @@ function createNoticePanel(notice) {
     canvas.className = 'notice-qr';
     canvas.setAttribute('aria-label', 'QRコード');
     try {
-      window.NoticeQR.draw(canvas, normalizedUrl, { size: 600, quietZone: 4 });
+      window.NoticeQR.draw(canvas, normalizedUrl, { size: 1200, quietZone: 4 });
       qrBlock.append(canvas);
     } catch (error) {
       console.warn('QR generation failed:', error);
@@ -279,16 +279,16 @@ function createNoticePanel(notice) {
 function titleSize(text = '') {
   const n = [...text].length;
   const split = state.settings.layout === 'split';
-  if (split) return n > 30 ? '6mm' : n > 18 ? '7mm' : '8.5mm';
-  return n > 36 ? '8mm' : n > 22 ? '10mm' : '12mm';
+  if (split) return n > 30 ? '6.5mm' : n > 18 ? '7.5mm' : '9.2mm';
+  return n > 36 ? '9mm' : n > 22 ? '11mm' : '13mm';
 }
 
 function bodySize(text = '') {
   const n = [...text].length;
   const lines = String(text).split('\n').length;
   const split = state.settings.layout === 'split';
-  if (split) return n > 220 || lines > 8 ? '3.4mm' : '4.3mm';
-  return n > 360 || lines > 12 ? '4.2mm' : n > 200 ? '5mm' : '6mm';
+  if (split) return n > 220 || lines > 8 ? '3.8mm' : '4.8mm';
+  return n > 360 || lines > 12 ? '4.6mm' : n > 200 ? '5.5mm' : '6.5mm';
 }
 
 function updatePreviewZoom() {
