@@ -265,11 +265,19 @@ button.small { min-height: 30px; padding: 4px 8px; font-size: 12px; }
   overflow: visible;
 }
 .fit-line {
-  display: block;
+  display: flex;
   width: 100%;
   max-width: none;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
   white-space: nowrap;
   overflow: visible;
+}
+.fit-line-inner {
+  display: inline-block;
+  max-width: none;
+  white-space: nowrap;
   transform-origin: center center;
 }
 .notice-qr-block {

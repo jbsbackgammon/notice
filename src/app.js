@@ -326,19 +326,24 @@ function appendFitLines(container, lines) {
   values.forEach(value => {
     const line = document.createElement('span');
     line.className = 'fit-line';
-    line.textContent = value || '\u00A0';
+    const inner = document.createElement('span');
+    inner.className = 'fit-line-inner';
+    inner.textContent = value || '\u00A0';
+    line.append(inner);
     container.append(line);
   });
 }
 
 function fitPreviewText() {
   $$('.fit-line', previewAreaEl).forEach(line => {
-    line.style.transform = 'none';
+    const inner = $('.fit-line-inner', line);
+    if (!inner) return;
+    inner.style.transform = 'none';
     const available = line.clientWidth;
-    const required = line.scrollWidth;
+    const required = inner.scrollWidth;
     if (!available || !required || required <= available) return;
     const scale = available / required;
-    line.style.transform = `scaleX(${scale})`;
+    inner.style.transform = `scaleX(${scale})`;
   });
 }
 
